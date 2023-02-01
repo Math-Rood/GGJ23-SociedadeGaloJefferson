@@ -5,14 +5,14 @@ namespace Interface
 {
     public class MenuController : MonoBehaviour
     {
-        public string sceneName;
+        public string sceneName; //Pega o nome da cena a ser carregada em LoadScene()
         
-        public void ExitGame()
+        public void ExitGame() //Fecha o jogo
         {
             Application.Quit();
         }
         
-        public void LoadScene()
+        public void LoadScene() //Carrega uma cena
         {
             SceneManager.LoadScene(sceneName);
         }
