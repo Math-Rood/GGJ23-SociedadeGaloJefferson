@@ -7,11 +7,11 @@ public class Parallax : MonoBehaviour
 {
     private float _length, _startPos;
     [SerializeField] private float speedParallax;
-    [SerializeField] private GameObject cam;
+    [SerializeField] public Transform cam;
     
     void Start()
     {
-
+        cam = Camera.main.transform;
         _startPos = transform.position.x;
         _length = GetComponent<SpriteRenderer>().bounds.size.x;
 
