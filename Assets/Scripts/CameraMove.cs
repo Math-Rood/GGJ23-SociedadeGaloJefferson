@@ -7,7 +7,7 @@ public class CameraMove : MonoBehaviour
 {
     [SerializeField]
     private float cameraSpeed = 3f;
-    private Transform cam;
+    [SerializeField] private Transform cam;
 
 
     private void Awake()
