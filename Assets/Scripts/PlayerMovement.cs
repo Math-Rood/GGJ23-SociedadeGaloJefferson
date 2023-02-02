@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
 
     public Transform groundDetector; //objeto para detectar o chão
     public LayerMask isGround; //layer do chão(ground)
-    public GameObject jumpDust;
     
     private Rigidbody2D _rb; //rigidbody do player
     private BoxCollider2D _col;
@@ -60,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
         
         if(Input.GetButtonDown("Jump") && _onGround){
             //_anim.SetBool(AniJump, true);
-            SpawnDustEffect();
             _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
         }
     }
@@ -80,11 +78,6 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         //_anim.SetBool(Fall, false);
-    }
-
-    void SpawnDustEffect()
-    {
-        Instantiate(jumpDust, transform.position, Quaternion.identity);
     }
 
 }
