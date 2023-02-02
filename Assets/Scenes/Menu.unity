@@ -387,7 +387,7 @@ GameObject:
   - component: {fileID: 600766258}
   - component: {fileID: 600766257}
   m_Layer: 5
-  m_Name: IMG_Title
+  m_Name: TittleBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -781,7 +781,7 @@ GameObject:
   - component: {fileID: 1429755108}
   - component: {fileID: 1429755107}
   m_Layer: 5
-  m_Name: IMG_Paper
+  m_Name: MenuBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -992,7 +992,7 @@ GameObject:
   - component: {fileID: 1551541636}
   - component: {fileID: 1551541635}
   m_Layer: 5
-  m_Name: BG0 (1)
+  m_Name: BG1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1085,7 +1085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 293f4f7e3c8dd9e4581954e6b6e79575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: SampleScene
+  sceneName: Gameplay
 --- !u!4 &1555110502
 Transform:
   m_ObjectHideFlags: 0
@@ -1315,7 +1315,7 @@ GameObject:
   - component: {fileID: 1917144963}
   - component: {fileID: 1917144962}
   m_Layer: 5
-  m_Name: BG0 (2)
+  m_Name: BG2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

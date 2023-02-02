@@ -5,7 +5,7 @@ namespace Interface
 {
     public class MenuController : MonoBehaviour
     {
-        public string sceneName;
+        [SerializeField] private string sceneName;
         
         public void ExitGame()
         {
