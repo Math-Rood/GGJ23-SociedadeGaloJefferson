@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     
     private Rigidbody2D _rb; //rigidbody do player
     private BoxCollider2D _col;
+
+    private bool isInverted;
     //private Animator _anim;
     private bool _onGround; //boleano que indica se o player está tocando no chão
     /*private static readonly int AniRun = Animator.StringToHash("run");
@@ -34,7 +36,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        Jump();
+        
+        RevertGravity();
     }
 
     void Move(){
@@ -60,6 +63,19 @@ public class PlayerMovement : MonoBehaviour
         if(Input.GetButtonDown("Jump") && _onGround){
             //_anim.SetBool(AniJump, true);
             _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+        }
+    }
+
+    void RevertGravity(){
+        if(Input.GetButtonDown("Jump")){
+            
+            _rb.gravityScale *= -1;
+            if(!isInverted){
+                transform.eulerAngles = new Vector3(0, 0, 180f);
+            }else{
+                transform.eulerAngles = Vector3.zero;
+            }
+            isInverted =!isInverted;
         }
     }
 
