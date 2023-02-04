@@ -28,22 +28,18 @@ namespace Interface
 
         IEnumerator LoadingAsync()
         {
-            yield return new WaitForSeconds(1f);
+            yield return null;
             AsyncOperation asyncProgress = SceneManager.LoadSceneAsync(id_screen);
-            float progressBar = Mathf.Clamp01(asyncProgress.progress);
-            Debug.Log("Progresso do Carregamento : " + progressBar);
-            
-            if (progressBar < 1f)
+
+            while (asyncProgress.progress < 0.9f)
             {
-                Debug.Log("Progresso do Carregamento com if menor que 1 : " + progressBar);
-                slider.value = progressBar;
-                yield return new WaitForSeconds(10f);
-            }
-            else if (asyncProgress.isDone)
-            {
-                Debug.Log("Progresso do Carregamento com if maior que 1 : " + progressBar);
-                slider.value = 1f;
-                yield return new WaitForSeconds(1f);
+                Debug.Log("Progresso do Carregamento com if menor que 1 : " + asyncProgress.progress);
+                slider.value = asyncProgress.progress;
+                if (asyncProgress.isDone)
+                {
+                    Debug.Log("Progresso do Carregamento com if maior que 1 : " + asyncProgress.progress);
+                    slider.value = 1f;
+                }
             }
 
             yield return new WaitForSeconds(3f);
