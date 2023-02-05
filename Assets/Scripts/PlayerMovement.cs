@@ -5,7 +5,8 @@ public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed; //velocidade de movimento
     public float jumpForce; //força do pulo
-
+    public bool readyForRun;
+    
     public Transform groundDetector; //objeto para detectar o chão
     public LayerMask isGround; //layer do chão(ground)
     
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        readyForRun = true;
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<BoxCollider2D>();
         //_anim = GetComponent<Animator>();
@@ -41,19 +43,22 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void Move(){
-        float moveX = Input.GetAxis("Horizontal");
-        _rb.velocity = new Vector2(moveX * moveSpeed, _rb.velocity.y);
+        if (readyForRun)
+        {
+            float moveX = Input.GetAxis("Horizontal");
+            _rb.velocity = new Vector2(moveX * moveSpeed, _rb.velocity.y);
 
-        if(Input.GetAxis("Horizontal") > 0f){
-            transform.eulerAngles = new Vector3(0f,0f,0f);
-            //_anim.SetBool(AniRun, true);
-        }
-        if(Input.GetAxis("Horizontal") < 0f){
-            transform.eulerAngles = new Vector3(0f,180f,0f);
-            //_anim.SetBool(AniRun, true);
-        }
-        if(Input.GetAxis("Horizontal") == 0){
-            //_anim.SetBool(AniRun, false);
+            if(Input.GetAxis("Horizontal") > 0f){
+                transform.eulerAngles = new Vector3(0f,0f,0f);
+                //_anim.SetBool(AniRun, true);
+            }
+            if(Input.GetAxis("Horizontal") < 0f){
+                transform.eulerAngles = new Vector3(0f,180f,0f);
+                //_anim.SetBool(AniRun, true);
+            }
+            if(Input.GetAxis("Horizontal") == 0){
+                //_anim.SetBool(AniRun, false);
+            }    
         }
     }
 
@@ -67,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void RevertGravity(){
-        if(Input.GetButtonDown("Jump")){
+        if(Input.GetButtonDown("Jump") && readyForRun){
             
             _rb.gravityScale *= -1;
             if(!isInverted){
