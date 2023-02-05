@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     private const string PLAYER_RUN = "Run";
     private const string PLAYER_JUMP = "Jump";
     private const string PLAYER_ATTACK = "Attack";
+    private const string PLAYER_AIR_ATTACK = "AirAttack";
     
     [SerializeField]
     private float attackDelay = 1f;
@@ -128,6 +129,11 @@ public class PlayerMovement : MonoBehaviour
                 if(isGrounded)
                 {
                     ChangeAnimationState(PLAYER_ATTACK);
+                }
+                
+                else
+                {
+                    ChangeAnimationState(PLAYER_AIR_ATTACK);
                 }
                 
                 Invoke("AttackComplete", attackDelay);
