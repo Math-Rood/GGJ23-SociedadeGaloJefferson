@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private BoxCollider2D _col;
 
     private bool isInverted;
-    //private Animator _anim;
+    private Animator _anim;
     private bool _onGround; //boleano que indica se o player está tocando no chão
     /*private static readonly int AniRun = Animator.StringToHash("run");
     private static readonly int AniJump = Animator.StringToHash("jump");
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<BoxCollider2D>();
-        //_anim = GetComponent<Animator>();
+        _anim = GetComponent<Animator>();
 
     }
 
@@ -36,8 +36,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        
-        RevertGravity();
+        Jump();
     }
 
     void Move(){
@@ -46,14 +45,14 @@ public class PlayerMovement : MonoBehaviour
 
         if(Input.GetAxis("Horizontal") > 0f){
             transform.eulerAngles = new Vector3(0f,0f,0f);
-            //_anim.SetBool(AniRun, true);
+            _anim.SetBool("Run", true);
         }
         if(Input.GetAxis("Horizontal") < 0f){
             transform.eulerAngles = new Vector3(0f,180f,0f);
-            //_anim.SetBool(AniRun, true);
+            _anim.SetBool("Run", true);
         }
         if(Input.GetAxis("Horizontal") == 0){
-            //_anim.SetBool(AniRun, false);
+            _anim.SetBool("Run", false);
         }
     }
 
@@ -61,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         _onGround = Physics2D.OverlapCircle(groundDetector.position, 0.1f, isGround);
         
         if(Input.GetButtonDown("Jump") && _onGround){
-            //_anim.SetBool(AniJump, true);
+            _anim.SetBool("Jump", true);
             _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
         }
     }
@@ -86,8 +85,8 @@ public class PlayerMovement : MonoBehaviour
     
     private void OnCollisionEnter2D()
     {
-        //_anim.SetBool(AniJump, false);
-        //_anim.SetBool(Fall, false);
+        _anim.SetBool("Jump", false);
+        
         
     }
 
