@@ -2566,7 +2566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id_screen: 1
-  progressBar: {fileID: 1389937600}
+  slider: {fileID: 1389937600}
   loadingScreen: {fileID: 249060540}
 --- !u!4 &1555110502
 Transform:
