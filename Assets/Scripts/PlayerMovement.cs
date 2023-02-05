@@ -4,29 +4,38 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed; //velocidade de movimento
-    public float jumpForce; //força do pulo
+    public float moveSpeed; 
+    public float jumpForce; 
 
-    public Transform groundDetector; //objeto para detectar o chão
-    public LayerMask isGround; //layer do chão(ground)
-    
-    private Rigidbody2D _rb; //rigidbody do player
+    public Transform groundDetector;
+
+    private Rigidbody2D _rb;
     private BoxCollider2D _col;
     public int maxHealth = 500;
     public int currentHealth;
     public HealthBar healthbar;
     public LayerMask enemyLayers;
     public SpriteRenderer sprite;
+    private string currentState;
+    private float moveX;
+    private int groundMask;
 
     private bool isInverted;
     private Animator _anim;
-    private bool _onGround; //boleano que indica se o player está tocando no chão
-    /*private static readonly int AniRun = Animator.StringToHash("run");
-    private static readonly int AniJump = Animator.StringToHash("jump");
-    private static readonly int Death = Animator.StringToHash("death");
-    private static readonly int Fall = Animator.StringToHash("fall");*/
+    private bool isGrounded;
+    private bool isJumpPressed;
+    private bool isAttackPressed;
+    private bool isAttacking;
 
-
+    private const string PLAYER_IDLE = "Idle";
+    private const string PLAYER_RUN = "Run";
+    private const string PLAYER_JUMP = "Jump";
+    private const string PLAYER_ATTACK = "Attack";
+    
+    [SerializeField]
+    private float attackDelay = 1f;
+    
+    
     void Start()
     {
         currentHealth = maxHealth;
@@ -34,43 +43,116 @@ public class PlayerMovement : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<BoxCollider2D>();
         _anim = GetComponent<Animator>();
+        groundMask = 1 << LayerMask.NameToLayer("Ground");
 
     }
 
     void FixedUpdate()
     {
+        RaycastHit2D hit = Physics2D.Raycast(groundDetector.position, Vector2.down, 0.1f, groundMask);
+
+        if (hit.collider != null)
+        {   
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
+        
         Move();
+        Jump();
+        Attack();
     }
 
     private void Update()
     {
-        Jump();
+        moveX = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isJumpPressed = true;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            isAttackPressed = true;
+        }
     }
 
     void Move(){
-        float moveX = Input.GetAxis("Horizontal");
         _rb.velocity = new Vector2(moveX * moveSpeed, _rb.velocity.y);
+        
+            if(moveX > 0f){
+                transform.eulerAngles = new Vector3(0f,0f,0f);
+            }
+            if(moveX < 0f){
+                transform.eulerAngles = new Vector3(0f,180f,0f);
+            }
 
-        if(Input.GetAxis("Horizontal") > 0f){
-            transform.eulerAngles = new Vector3(0f,0f,0f);
-            _anim.SetBool("Run", true);
-        }
-        if(Input.GetAxis("Horizontal") < 0f){
-            transform.eulerAngles = new Vector3(0f,180f,0f);
-            _anim.SetBool("Run", true);
-        }
-        if(Input.GetAxis("Horizontal") == 0){
-            _anim.SetBool("Run", false);
-        }
+            if (isGrounded && !isAttacking)
+            {
+                if (moveX != 0)
+                {
+                    ChangeAnimationState(PLAYER_RUN);
+                }
+                else
+                {
+                    ChangeAnimationState(PLAYER_IDLE);
+                } 
+            }
+
+           
     }
 
     void Jump(){
-        _onGround = Physics2D.OverlapCircle(groundDetector.position, 0.1f, isGround);
         
-        if(Input.GetButtonDown("Jump") && _onGround){
-            _anim.SetBool("Jump", true);
+        
+        if(isJumpPressed && isGrounded){
             _rb.velocity = new Vector2(_rb.velocity.x, jumpForce);
+            isJumpPressed = false;
+            ChangeAnimationState(PLAYER_JUMP);
         }
+        
+    }
+    
+    void Attack(){
+
+        if(isAttackPressed){
+            isAttackPressed = false;
+            
+            if (!isAttacking)
+            {
+                isAttacking = true;
+
+                if(isGrounded)
+                {
+                    ChangeAnimationState(PLAYER_ATTACK);
+                }
+                
+                Invoke("AttackComplete", attackDelay);
+
+
+            }
+        }
+        
+        
+    }
+    
+    void AttackComplete()
+    {
+        isAttacking = false;
+    }
+
+    void ChangeAnimationState(string newState)
+    {
+        if(currentState == newState) return;
+        
+        _anim.Play(newState);
+
+        currentState = newState;
+        
+        
     }
 
     void RevertGravity(){
@@ -117,23 +199,5 @@ public class PlayerMovement : MonoBehaviour
         _anim.SetTrigger("Die");
         Destroy(gameObject, 1f);
     }
-
-
-    private void OnCollisionExit2D()
-    {
-        //_anim.SetBool(Fall, true);
-    }
     
-    private void OnCollisionEnter2D()
-    {
-        _anim.SetBool("Jump", false);
-        
-        
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        //_anim.SetBool(Fall, false);
-    }
-
 }
