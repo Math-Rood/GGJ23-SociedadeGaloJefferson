@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -11,6 +12,11 @@ public class PlayerMovement : MonoBehaviour
     
     private Rigidbody2D _rb; //rigidbody do player
     private BoxCollider2D _col;
+    public int maxHealth = 500;
+    public int currentHealth;
+    public HealthBar healthbar;
+    public LayerMask enemyLayers;
+    public SpriteRenderer sprite;
 
     private bool isInverted;
     private Animator _anim;
@@ -23,6 +29,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        currentHealth = maxHealth;
+        sprite = GetComponent<SpriteRenderer>();
         _rb = GetComponent<Rigidbody2D>();
         _col = GetComponent<BoxCollider2D>();
         _anim = GetComponent<Animator>();
@@ -77,6 +85,39 @@ public class PlayerMovement : MonoBehaviour
             isInverted =!isInverted;
         }
     }
+    
+    public IEnumerator DamagePlayer(){
+        _anim.SetBool("Damage", true);
+        yield return new WaitForSeconds(0.2f);
+        _anim.SetBool("Damage", false);
+
+        for(int i = 0; i < 7; i++){
+            sprite.enabled = false;
+            yield return new WaitForSeconds(0.15f);
+            sprite.enabled = true;
+            yield return new WaitForSeconds(0.15f);
+        }
+
+        GetComponent<BodyTrigger>().body.enabled = true;
+    }
+
+    
+    public void TakeDamage(int damage){
+        currentHealth -= damage;
+
+        healthbar.SetHealth(currentHealth);
+
+        if(currentHealth <= 0){
+            Die();
+        }
+    }
+
+
+    void Die(){
+        _anim.SetTrigger("Die");
+        Destroy(gameObject, 1f);
+    }
+
 
     private void OnCollisionExit2D()
     {
